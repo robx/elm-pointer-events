@@ -142,16 +142,18 @@ you can change it with for example:
 
     myOnDown : (Pointer.Event -> msg) -> Html.Attribute msg
     myOnDown =
-        { stopPropagation = False, preventDefault = True }
-            |> Pointer.onWithOptions "pointerdown"
+        let defaultOptions = Html.Events.defaultOptions in
+            { defaultOptions | preventDefault = True }
+                |> Pointer.onWithOptions "pointerdown"
 
 You can also use `Pointer.onWithOptions` to listen to an event not
 already covered by the functions in this package, like `pointercancel`:
 
     onCancel : (Pointer.Event -> msg) -> Html.Attribute msg
     onCancel =
-        { stopPropagation = True, preventDefault = True }
-            |> Pointer.onWithOptions "pointercancel"
+        let defaultOptions = Html.Events.defaultOptions in
+            { defaultOptions | stopPropagation = True, preventDefault = True }
+                |> Pointer.onWithOptions "pointercancel"
 
 BEWARE that the minimalist [elm-pep] polyfill may not support
 this event. So if you rely on it for compatibility with browsers
@@ -169,8 +171,13 @@ onWithOptions event options tag =
 
 stopOptions : Html.Events.Options
 stopOptions =
-    { stopPropagation = True
-    , preventDefault = True
+    let
+        defaultOptions =
+            Html.Events.defaultOptions
+    in
+    { defaultOptions
+        | stopPropagation = True
+        , preventDefault = True
     }
 
 
@@ -212,7 +219,8 @@ And use it like as follows:
 
     stopOptions : Html.Events.Options
     stopOptions =
-        { stopPropagation = True
+        { Html.Events.defaultOptions
+        | stopPropagation = True
         , preventDefault = True
         }
 
